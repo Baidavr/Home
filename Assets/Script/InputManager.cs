@@ -8,8 +8,6 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        // инкапсул€ци€
-
         VerticalInput = Input.GetAxis("Vertical");
     }
 }
