@@ -9,9 +9,11 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float Acceleration;
     [SerializeField] float MaxSpeed;
+    [SerializeField] float SpeedJump;
     [SerializeField] float RotationSpeed;
     [SerializeField] Rigidbody rb;
     [SerializeField] Transform Camera;
+    [SerializeField] Jump _jump;
 
     float CurSpeed;
 
@@ -28,6 +30,24 @@ public class PlayerMovement : MonoBehaviour
         Move();  //вызов метода,который управляет движением объекта
 
         Rotate();  //вызов метода,который управляет вращением объекта
+
+        Jump();
+    }
+
+    private void Jump()
+    {
+        // если
+        // Нажата клавиша пробела,
+        // то направление игрока по Y = 5
+
+        // если(Ввод.НажатаЛиКлавиша(НомерКлавиши.Пробел)) { ... }
+        // и прыжок.НаЗемлеЛи == да
+        if (Input.GetKeyDown(KeyCode.Space) && _jump.IsGrounded == true)
+        {
+            Vector3 jump = rb.velocity;
+            jump.y = SpeedJump;
+            rb.velocity = jump;
+        }
     }
 
     private void ChiftControl()
