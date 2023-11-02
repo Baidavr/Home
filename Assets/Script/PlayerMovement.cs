@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float MaxSpeed;
     [SerializeField] float SpeedJump;
     [SerializeField] float RotationSpeed;
+    [SerializeField] float RotationSpeedY;
     [SerializeField] Rigidbody rb;
     [SerializeField] Transform Camera;
     [SerializeField] Jump _jump;
@@ -75,8 +76,10 @@ public class PlayerMovement : MonoBehaviour
         float hor = Input.GetAxis("Horizontal"); // получение данных ввода от пользователя по горизонтальной оси A и D
         float ver = Input.GetAxis("Vertical"); //  получение данных ввода от пользователя по горизонтальной оси W и S
 
-        rb.AddForce(Camera.forward * Acceleration * Time.deltaTime * ver);
-        rb.AddForce(Camera.right * Acceleration * Time.deltaTime * hor);
+        // forward - перед -         -forward - backward - назад
+        // right - направо -         -right - left - налево
+        rb.AddForce(transform.forward * Acceleration * Time.deltaTime * ver);
+        rb.AddForce(transform.right * Acceleration * Time.deltaTime * hor);
 
         SpeedControl();
 
@@ -115,8 +118,28 @@ public class PlayerMovement : MonoBehaviour
 
     private void Rotate()
     {
-        float yRotation = Input.GetAxis("Mouse X");
-        transform.Rotate(0, yRotation * RotationSpeed * Time.deltaTime, 0);
+        float mouseX = Input.GetAxis("Mouse X");
+        transform.Rotate(0, mouseX * RotationSpeed * Time.deltaTime, 0);
+
+        float mouseY = Input.GetAxis("Mouse Y");
+        Vector3 Rotation = Camera.localRotation.eulerAngles;
+        // rot.x = rot.x - mouseY
+        // Clamp - обрезает число между двумя границами, принимает число, минимальное и максимальное значение
+        // clamp(5, 2, 6) = 5
+        // clamp(1, 3, 7) = 3
+        // clamp(-1, -3, -7) = -3
+        // clamp(10, 3, 5) = 5
+        //Rotation.x = Mathf.Clamp(Rotation.x - mouseY * RotationSpeed * Time.deltaTime, , );
+        Rotation.x = Rotation.x - mouseY * RotationSpeedY * Time.deltaTime;
+        if (Rotation.x > 180)
+        {
+            Rotation.x = Mathf.Clamp(Rotation.x, 360 - 70, 361);
+        }
+        else if (Rotation.x < 180)
+        {
+            Rotation.x = Mathf.Clamp(Rotation.x, -1, 45);
+        }
+        Camera.localRotation = Quaternion.Euler(Rotation);
     }
 }
 
