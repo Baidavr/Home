@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class Phrases : MonoBehaviour
 {
-    [SerializeField] string[] phrases;
-    int phrasesIndex;
+    [SerializeField] QuestionAnswersPair phrases;
 
-
-    // Update is called once per frame
-    public string Conversation()
+    public QuestionAnswersPair Conversation()
     {
-        phrasesIndex ++;
-        return phrases[phrasesIndex - 1];
+        return phrases;
+    }
+
+    public void SetConversation(QuestionAnswersPair conversation)
+    {
+        phrases = conversation;
     }
 }
